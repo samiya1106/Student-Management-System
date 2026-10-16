@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Students - Student Management System{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <h1>Students</h1>
+        <p class="muted">
+            {% if query %}
+                {{ students|length }} result{{ '' if students|length == 1 else 's' }} for
+                &ldquo;<strong>{{ query }}</strong>&rdquo;
+            {% else %}
+                {{ students|length }} student{{ '' if students|length == 1 else 's' }} saved
+            {% endif %}
+        </p>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('add_student_page') }}">+ Add Student</a>
+</section>
+
+<section class="card">
+    <form class="search-form search-wide" action="{{ url_for('students_page') }}" method="get">
+        <input type="search" name="q" value="{{ query }}" placeholder="Search by roll number, name or course" aria-label="Search students">
+        <button class="btn btn-primary" type="submit">Search</button>
+        {% if query %}
+            <a class="btn btn-outline" href="{{ url_for('students_page') }}">Clear</a>
+        {% endif %}
+    </form>
+    {% include "_table.html" %}
+</section>
+{% endblock %}

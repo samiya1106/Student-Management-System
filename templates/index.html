@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Student Management System{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <h1>Student Management Dashboard</h1>
+        <p class="muted">An overview of all student records.</p>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('add_student_page') }}">+ Add Student</a>
+</section>
+
+<section class="stats">
+    <div class="stat-card">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value">{{ stats.total }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Average Marks</div>
+        <div class="stat-value">{{ '%.1f'|format(stats.average) }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Highest Marks</div>
+        <div class="stat-value">{{ '%.1f'|format(stats.highest) }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Courses</div>
+        <div class="stat-value">{{ stats.courses }}</div>
+    </div>
+</section>
+
+<section class="card">
+    <div class="card-head">
+        <h2>All Students</h2>
+        <form class="search-form" action="{{ url_for('students_page') }}" method="get">
+            <input type="search" name="q" placeholder="Search roll number, name or course" aria-label="Search students">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+    {% include "_table.html" %}
+</section>
+{% endblock %}

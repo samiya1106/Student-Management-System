@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Delete Student - Student Management System{% endblock %}
+
+{% block content %}
+<section class="card form-card confirm-card">
+    <div class="confirm-icon">!</div>
+    <h1>Delete this student?</h1>
+    <p class="muted">This action cannot be undone.</p>
+
+    <dl class="details">
+        <dt>Roll Number</dt><dd>{{ student.roll_number }}</dd>
+        <dt>Name</dt><dd>{{ student.name }}</dd>
+        <dt>Course</dt><dd>{{ student.course }}</dd>
+        <dt>Marks</dt><dd>{{ '%.2f'|format(student.marks) }}</dd>
+    </dl>
+
+    <form method="post" class="form-actions">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-danger-solid" type="submit">Yes, delete</button>
+        <a class="btn btn-outline" href="{{ url_for('students_page') }}">No, go back</a>
+    </form>
+</section>
+{% endblock %}

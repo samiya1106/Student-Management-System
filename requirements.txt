@@ -1,0 +1,3 @@
+# The terminal application uses only Python's standard library.
+# The website needs Flask:
+Flask>=3.0,<4.0

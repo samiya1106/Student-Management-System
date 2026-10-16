@@ -1,0 +1,17 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE / editor settings
+.idea/
+.vscode/
+
+# Database files (real student data must not be committed)
+*.db
+*.sqlite
+*.sqlite3

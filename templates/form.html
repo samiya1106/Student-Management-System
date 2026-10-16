@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit Student' if mode == 'edit' else 'Add Student' }} - Student Management System{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div>
+        <h1>{{ 'Edit Student' if mode == 'edit' else 'Add New Student' }}</h1>
+        <p class="muted">
+            {% if mode == 'edit' %}Update the details of {{ values.roll_number }}.{% else %}Fill in all fields and press Save.{% endif %}
+        </p>
+    </div>
+</section>
+
+<section class="card form-card">
+    <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="field {{ 'has-error' if errors.roll_number }}">
+            <label for="roll_number">Roll Number</label>
+            <input type="text" id="roll_number" name="roll_number" maxlength="20"
+                   value="{{ values.roll_number }}" placeholder="e.g. CS101"
+                   {% if mode == 'edit' %}readonly{% else %}autofocus{% endif %}>
+            {% if mode == 'edit' %}<div class="hint">The roll number cannot be changed.</div>{% endif %}
+            {% if errors.roll_number %}<div class="error-text">{{ errors.roll_number }}</div>{% endif %}
+        </div>
+
+        <div class="field {{ 'has-error' if errors.name }}">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" maxlength="50"
+                   value="{{ values.name }}" placeholder="e.g. Test Student"
+                   {% if mode == 'edit' %}autofocus{% endif %}>
+            {% if errors.name %}<div class="error-text">{{ errors.name }}</div>{% endif %}
+        </div>
+
+        <div class="field {{ 'has-error' if errors.course }}">
+            <label for="course">Course</label>
+            <input type="text" id="course" name="course" maxlength="50"
+                   value="{{ values.course }}" placeholder="e.g. Computer Engineering">
+            {% if errors.course %}<div class="error-text">{{ errors.course }}</div>{% endif %}
+        </div>
+
+        <div class="field {{ 'has-error' if errors.marks }}">
+            <label for="marks">Marks (0 - 100)</label>
+            <input type="text" inputmode="decimal" id="marks" name="marks"
+                   value="{{ values.marks }}" placeholder="e.g. 85">
+            {% if errors.marks %}<div class="error-text">{{ errors.marks }}</div>{% endif %}
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">{{ 'Save Changes' if mode == 'edit' else 'Save Student' }}</button>
+            <a class="btn btn-outline" href="{{ url_for('students_page') }}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
