@@ -1,55 +1,48 @@
-// Declarative Jenkins pipeline for the Student Management System.
-// Target: Windows (uses 'bat' steps). One command per bat step so that
-// a failing command always fails the stage.
 
 pipeline {
     agent any
 
     options {
-        skipDefaultCheckout(true)                       // we checkout in our own stage
-        buildDiscarder(logRotator(numToKeepStr: '10'))  // keep the last 10 builds
+        skipDefaultCheckout(true)
+        buildDiscarder(logRotator(numToKeepStr: '10'))
     }
 
     environment {
-        VENV_DIR   = '.venv'
-        DEPLOY_DIR = 'C:\\StudentManagementSystem_Deploy'
+        VENV_DIR = '.venv'
+        DEPLOY_DIR = 'deploy'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
-                bat 'dir /b'
+                sh 'ls -la'
             }
         }
 
         stage('Setup Python Environment') {
             steps {
-                bat 'python --version'
-                bat 'python -m venv %VENV_DIR%'
+                sh 'python3 --version'
+                sh 'python3 -m venv "$VENV_DIR"'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Installs Flask (needed for the website tests). Needs internet access.
-                bat '%VENV_DIR%\\Scripts\\python -m pip install -r requirements.txt'
+                sh '"$VENV_DIR/bin/python" -m pip install -r requirements.txt'
             }
         }
 
         stage('Run Automated Tests') {
             steps {
-                // If any test fails, unittest exits with an error code,
-                // this stage fails, and the Deployment Preparation stage is skipped.
-                bat '%VENV_DIR%\\Scripts\\python -m unittest discover -s . -p "test_*.py" -v'
+                sh '"$VENV_DIR/bin/python" -m unittest discover -s . -p "test_*.py" -v'
             }
         }
 
         stage('Deployment Preparation') {
             steps {
-                // Copies application files to DEPLOY_DIR. Never touches student data.
-                bat 'call deploy.bat "%DEPLOY_DIR%"'
+                sh 'mkdir -p "$DEPLOY_DIR"'
+                sh 'cp -r app.py student_management.py requirements.txt templates static "$DEPLOY_DIR"/'
             }
         }
     }
